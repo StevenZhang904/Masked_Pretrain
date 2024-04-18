@@ -1,0 +1,63 @@
+project_name: 'water_masked_finetune'
+log_dir: './experiments_dft/water_EGNN_ft_masked_finetune_denoise1'
+gpu: 'cuda:0'
+
+lr: 1e-4    # if fine tune set to 4.5e-5
+min_lr: 5e-5
+weight_decay: 0.0001
+
+epochs: 300
+warmup_epochs: 0
+patience_epochs: 0
+seed: 1234
+masking_ratio: 0.5
+
+
+load_model: None
+reset_head: False
+
+# Select the GNN model. Supported models:
+# - SchNet: K. T. Schütt et al., https://aip.scitation.org/doi/10.1063/1.5019779 
+# - SE(3)-Transformer: F. B. Fuchs et al., https://arxiv.org/abs/2006.10503
+# - EGNN: V. G. Satorras et al., https://arxiv.org/abs/2102.09844 
+# - TorchMD-Net: P. Thölke et al., https://arxiv.org/abs/2202.02541
+# The defualt settings are listed below.
+
+training:
+  batch_size: 16
+  num_workers: 12
+  force_weight: 500
+  energy_weight: 1
+
+model: 
+  name: "EGNN"
+  hidden_channels: 128
+  in_edge_nf: 0
+  n_layers: 5
+  residual: True
+  attention: False
+  normalize: True
+  tanh: False
+  cutoff: 3.5
+  max_atom_type: 28
+  max_chirality_type: 5
+  max_num_neighbors: 32
+  use_pbc: True
+  pretrain_return: False
+
+
+
+dataset:
+  data_dir: 'RPBE-waterdataX.npz'
+  name: 'RPBE'
+  num_samples: -1
+  checkfile: False
+  add_noise: False
+
+  # data_dir: 'water_data_tip3p/'
+  # name: 'tip3p'
+  # num_samples: 1000
+  # num_seeds: 10
+  # m_num: 258
+  # checkfile: False
+  # add_noise: False
